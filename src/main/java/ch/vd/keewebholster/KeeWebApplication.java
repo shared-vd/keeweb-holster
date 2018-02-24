@@ -1,4 +1,4 @@
-package ch.vd.keeweb;
+package ch.vd.keewebholster;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
 @Import({
+        KdbxProperties.class,
         SinglePageAppConfig.class
 })
 public class KeeWebApplication {

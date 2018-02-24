@@ -1,4 +1,4 @@
-package ch.vd.keeweb;
+package ch.vd.keewebholster;
 
 public class KeeWebTomcatRunner {
 

@@ -1,4 +1,4 @@
-package ch.vd.keeweb;
+package ch.vd.keewebholster;
 
 import org.apache.catalina.Context;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
