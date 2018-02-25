@@ -1,7 +1,13 @@
 {
   "settings": {
     "theme": "fb",
+    "autoSave": true,
     "dropbox": false,
+    "canOpen": false,
+    "canOpenDemo": false,
+    "canOpenSettings": false,
+    "canCreate": false,
+    "canImportXml": false,
     "webdav": true,
     "webdavSaveMethod": "put",
     "gdrive": false,

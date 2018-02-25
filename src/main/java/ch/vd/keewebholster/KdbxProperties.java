@@ -5,8 +5,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "kdbx")
 public class KdbxProperties {
 
-    private String dir;
-    private String name;
+    private String dir = "kdbxFiles";
+    private String name = "Secrets";
 
     public String getDir() {
         return dir;
