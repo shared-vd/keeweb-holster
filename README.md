@@ -31,29 +31,35 @@ Copy ```target/keewebholster.war``` to ```<tomcat>/webapps/keewebholster.war```
 
 Run
 
-```target/keewebholster.war start```
+```./start.sh```
 
-## Parameters
+To stop
+
+```./stop.sh```
+
+## Switches
+
+### HTTP port
+
+The default value is 7070
+Edit start.sh and change the PORT variable
 
 ### Data dir
 
 The default KDBX is saved in the directory: ${kdbx.dir}/
 
-_Default value_: kdbx.dir=<directory where keewebholster.war resides
+_Default value_: kdbx.dir=<current directory>
 
 Overriding kdbx.dir:
-Run
+Edit start.sh and change the KDBX_DIR variable
 
-```target/keewebholster.war -Dkdbx.dir=<mydir> start```
 
 ### KDBX filename
 
 The default KDBX file is named Secrets.kdbx
 
-Overriding default filenae: 
-Run
-
-```target/keewebholster.war -Dkdbx.name=<mykdbx> start```
+Overriding default filename: 
+Edit start.sh and change the KDBX_NAME variable
 
 
 ## KeeWeb config options
@@ -61,4 +67,3 @@ Run
 KeeWeb can be configured by a config.json file
 By default, keewebholster automatically provides such a file.
 You can override this default file with yours. Just provide one file named config.json and put it in ${kdbx.dir}
-
