@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Import;
 @SpringBootApplication
 @Import({
         KdbxProperties.class,
-        SinglePageAppConfig.class
+        KeeWebHolsterWebMvcConfigurerAdapter.class
 })
 public class KeeWebApplication {
 
