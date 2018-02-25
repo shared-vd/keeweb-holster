@@ -1,51 +1,72 @@
 package ch.vd.keewebholster;
 
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Date;
 
 @RestController
 @RequestMapping("/")
 public class SecretsController {
 
+    private static final Logger log = LoggerFactory.getLogger(SecretsController.class);
+
     @Autowired
     private KdbxProperties properties;
+
+    private static final String NAME_MISMATCH_ERROR = "The name of the Secrets file is not the same as the one configured";
 
     @GetMapping("/{name}.kdbx")
     public ResponseEntity<byte[]> getSecrets(@PathVariable String name) throws IOException {
         if (!properties.getName().equals(name)) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(NAME_MISMATCH_ERROR.getBytes(), HttpStatus.NOT_FOUND);
         }
 
-        final File path = new File(properties.getDir());
-        path.mkdirs();
-        final File file = new File(path, name + ".kdbx");
+        final byte[] data;
+        final HttpHeaders headers = new HttpHeaders();
+
+        final File file = getSecretsFile();
         if (file.exists()) {
-            try (FileInputStream fis = new FileInputStream(file)) {
-                final byte[] data = IOUtils.toByteArray(fis);
-                return new ResponseEntity<>(data, HttpStatus.OK);
+            log.info("Returning secrets file from " + file);
+            headers.setLastModified(file.lastModified());
+            try (InputStream fis = new FileInputStream(file)) {
+                data = IOUtils.toByteArray(fis);
+            }
+        } else {
+            log.info("Returning a new secrets file");
+            headers.setLastModified(new Date().getTime());
+            try (InputStream is = getClass().getResourceAsStream("/Empty.kdbx")) {
+                data = IOUtils.toByteArray(is);
             }
         }
-
-        // new file
-        final byte[] data = IOUtils.toByteArray(getClass().getResourceAsStream("/Empty.kdbx"));
-        final HttpHeaders headers = new HttpHeaders();
-        headers.setLastModified(new Date().getTime());
         return new ResponseEntity<>(data, headers, HttpStatus.OK);
     }
 
     @PutMapping("/{name}.kdbx")
-    public void putSecrets(@PathVariable String name) {
+    public ResponseEntity<String> putSecrets(@PathVariable String name, @RequestBody byte[] kdbx) throws IOException {
         if (!properties.getName().equals(name)) {
-            //return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(NAME_MISMATCH_ERROR, HttpStatus.NOT_FOUND);
         }
+
+        final File file = getSecretsFile();
+        log.info("Persisting secrets file to " + file);
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            IOUtils.write(kdbx, fos);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    private File getSecretsFile() {
+        final File path = new File(properties.getDir());
+        path.mkdirs();
+        final File file = new File(path, properties.getName() + ".kdbx");
+        return file;
     }
 }
