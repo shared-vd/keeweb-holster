@@ -152,6 +152,7 @@
     </dependencies>
 
     <build>
+        <finalName>keewebholster-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
