@@ -50,7 +50,6 @@
                             <finalName>${assembly.finalName}</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                             <tarLongFileMode>posix</tarLongFileMode>
-                            <ignoreMissingDescriptor>true</ignoreMissingDescriptor>
                         </configuration>
                     </plugin>
                     <plugin>

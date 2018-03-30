@@ -1,0 +1,41 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+
+    <id>release</id>
+
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+
+    <includeBaseDirectory>true</includeBaseDirectory>
+
+    <!-- put everything (except svn) from deployment dir: -->
+    <fileSets>
+        <fileSet>
+            <directory>appDir/data</directory>
+            <outputDirectory>data</outputDirectory>
+        </fileSet>
+    </fileSets>
+
+    <files>
+        <file>
+            <source>target/${project.artifactId}-${version}.war</source>
+            <destName>${project.artifactId}.war</destName>
+            <outputDirectory>deployment</outputDirectory>
+        </file>
+        <file>
+            <source>appDir/logback-spring.xml</source>
+            <outputDirectory>config</outputDirectory>
+        </file>
+        <file>
+            <source>appDir/empty.txt</source>
+            <outputDirectory>logs</outputDirectory>
+        </file>
+        <file>
+            <source>appDir/empty.txt</source>
+            <outputDirectory>audit</outputDirectory>
+        </file>
+    </files>
+
+</assembly>
