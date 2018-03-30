@@ -4,7 +4,7 @@
 
     <groupId>ch.vd.keeweb</groupId>
     <artifactId>keeweb-holster</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>keeweb-holster</name>
@@ -19,7 +19,7 @@
 
     <scm>
         <developerConnection>scm:git:git@github.com::shared-vd/keeweb-holster</developerConnection>
-        <tag>1.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <profiles>
