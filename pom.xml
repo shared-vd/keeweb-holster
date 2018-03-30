@@ -18,6 +18,122 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    <scm>
+        <developerConnection>scm:git:git@github.com::shared-vd/keeweb-holster</developerConnection>
+        <tag>HEAD</tag>
+    </scm>
+
+    <profiles>
+        <profile>
+            <!-- Pour faire la livraison au CEI dans xFile -->
+            <id>env.cei</id>
+            <properties>
+                <assembly.env>CEI</assembly.env>
+            </properties>
+            <build>
+                <plugins>
+                    <!-- Pour générer le fichier pour le CEI -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-assembly-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>single</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>${assembly.xmlfile}</descriptor>
+                            </descriptors>
+                            <finalName>${assembly.finalName}</finalName>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <tarLongFileMode>posix</tarLongFileMode>
+                            <ignoreMissingDescriptor>true</ignoreMissingDescriptor>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>cei.aew.web</groupId>
+                        <artifactId>cei-maven-plugin</artifactId>
+                        <version>${cei-maven-plugin.version}</version>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>upload</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <webresourceurl>${xfile.url}</webresourceurl>
+                            <filetoupload>target/${assembly.finalName}.tar.gz</filetoupload>
+                            <!-- TO BE CHANGED -->
+                            <from>dsi_pee</from>
+                            <to>WEB</to>
+                            <warprojectonly>true</warprojectonly>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>devex.release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>ch.vd.devex</groupId>
+                        <artifactId>devex-maven-plugin</artifactId>
+                        <version>${devex-maven-plugin.version}</version>
+                        <configuration>
+                            <configTag>${devex.configTag}</configTag>
+                            <warProjectOnly>true</warProjectOnly>
+                            <failOnError>false</failOnError>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>release</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>create-release</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>devex.in</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>ch.vd.devex</groupId>
+                        <artifactId>devex-maven-plugin</artifactId>
+                        <version>${devex-maven-plugin.version}</version>
+                        <configuration>
+                            <configTag>${devex.configTag}</configTag>
+                            <warProjectOnly>true</warProjectOnly>
+                            <environment>IN</environment>
+                            <releaseVersion>${devex.releaseVersion}</releaseVersion>
+                            <failOnError>false</failOnError>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>deploy</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>deploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -46,6 +162,19 @@
                     <finalName>keewebholster</finalName>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven-release-plugin.version}</version>
+                <configuration>
+                    <updateDependencies>false</updateDependencies>
+                    <goals>${release.goals}</goals>
+                    <pushChanges>true</pushChanges>
+                    <releaseProfiles>${release.profiles}</releaseProfiles>
+                    <tagNameFormat>@{project.version}</tagNameFormat>
+                    <arguments>-Dmaven.javadoc.skip=true</arguments>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -53,6 +182,26 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
+
+        <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
+        <cei-maven-plugin.version>1.0.2</cei-maven-plugin.version>
+        <devex-maven-plugin.version>1.0.15</devex-maven-plugin.version>
+
+        <xfile.url>http://exploitation.etat-de-vaud.ch/outils/web/ws/rest</xfile.url>
+        <xfile.group>dsi_pee</xfile.group>
+
+        <!-- A surcharger par application -->
+        <devex.configTag>master</devex.configTag>
+        <devex.releaseVersion>${project.version}</devex.releaseVersion>
+
+        <!-- -Pnot parce que les tests ont déja été run par release:prepare -->
+        <release.profiles>not</release.profiles>
+        <!-- Les goals assembly:single et cei:upload sont deja pris par env.cei -->
+        <release.goals>clean deploy</release.goals>
+
+        <assembly.env>TBD</assembly.env>
+        <assembly.finalName>${project.artifactId}-${project.version}</assembly.finalName>
+        <assembly.xmlfile>assembly.xml</assembly.xmlfile>
     </properties>
 
 </project>
