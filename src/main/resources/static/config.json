@@ -1,6 +1,6 @@
 {
   "settings": {
-    "theme": "fb",
+    "theme": "wh",
     "autoSave": true,
     "dropbox": false,
     "canOpen": false,
@@ -16,8 +16,28 @@
   "files": [
     {
       "storage": "webdav",
-      "name": "Secrets",
-      "path": "/Secrets.kdbx"
+      "name": "Portail",
+      "path": "/Portail.kdbx"
+    },
+    {
+      "storage": "webdav",
+      "name": "Echanges",
+      "path": "/Echanges.kdbx"
+    },
+    {
+      "storage": "webdav",
+      "name": "Fiscalité",
+      "path": "/Fiscalite.kdbx"
+    },
+    {
+      "storage": "webdav",
+      "name": "USSI",
+      "path": "/USSI.kdbx"
+    },
+    {
+      "storage": "webdav",
+      "name": "Référentiels",
+      "path": "/Referentiels.kdbx"
     }
   ],
   "showOnlyFilesFromConfig": true
