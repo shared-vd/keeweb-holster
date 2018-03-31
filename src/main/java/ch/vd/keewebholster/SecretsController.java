@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.*;
+import java.util.Arrays;
 import java.util.Date;
 
 @RestController
@@ -25,14 +26,15 @@ public class SecretsController {
 
     @GetMapping("/{name}.kdbx")
     public ResponseEntity<byte[]> getSecrets(@PathVariable String name) throws IOException {
-        if (!properties.getName().equals(name)) {
+        log.info("Asking file "+name);
+        if (!Arrays.asList(properties.getNames()).contains(name)) {
             return new ResponseEntity<>(NAME_MISMATCH_ERROR.getBytes(), HttpStatus.NOT_FOUND);
         }
 
         final byte[] data;
         final HttpHeaders headers = new HttpHeaders();
 
-        final File file = getSecretsFile();
+        final File file = getSecretsFile(name);
         if (file.exists()) {
             log.info("Returning secrets file from " + file);
             headers.setLastModified(file.lastModified());
@@ -51,11 +53,11 @@ public class SecretsController {
 
     @PutMapping("/{name}.kdbx")
     public ResponseEntity<String> putSecrets(@PathVariable String name, @RequestBody byte[] kdbx) throws IOException {
-        if (!properties.getName().equals(name)) {
+        if (!Arrays.asList(properties.getNames()).contains(name)) {
             return new ResponseEntity<>(NAME_MISMATCH_ERROR, HttpStatus.NOT_FOUND);
         }
 
-        final File file = getSecretsFile();
+        final File file = getSecretsFile(name);
         log.info("Persisting secrets file to " + file);
         try (FileOutputStream fos = new FileOutputStream(file)) {
             IOUtils.write(kdbx, fos);
@@ -63,10 +65,10 @@ public class SecretsController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    private File getSecretsFile() {
+    private File getSecretsFile(String name) {
         final File path = new File(properties.getDir());
         path.mkdirs();
-        final File file = new File(path, properties.getName() + ".kdbx");
+        final File file = new File(path, name + ".kdbx");
         return file;
     }
 }

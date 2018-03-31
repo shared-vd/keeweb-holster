@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class KdbxProperties {
 
     private String dir = "kdbxFiles";
-    private String name = "Secrets";
+    private String[] names = {"Secrets"};
 
     public String getDir() {
         return dir;
@@ -16,11 +16,11 @@ public class KdbxProperties {
         this.dir = dir;
     }
 
-    public String getName() {
-        return name;
+    public String[] getNames() {
+        return names;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setNames(String[] name) {
+        this.names = name;
     }
 }

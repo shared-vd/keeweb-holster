@@ -17,27 +17,27 @@
     {
       "storage": "webdav",
       "name": "Portail",
-      "path": "/Portail.kdbx"
+      "path": "Portail.kdbx"
     },
     {
       "storage": "webdav",
       "name": "Echanges",
-      "path": "/Echanges.kdbx"
+      "path": "Echanges.kdbx"
     },
     {
       "storage": "webdav",
       "name": "Fiscalité",
-      "path": "/Fiscalite.kdbx"
+      "path": "Fiscalite.kdbx"
     },
     {
       "storage": "webdav",
       "name": "USSI",
-      "path": "/USSI.kdbx"
+      "path": "USSI.kdbx"
     },
     {
       "storage": "webdav",
       "name": "Référentiels",
-      "path": "/Referentiels.kdbx"
+      "path": "Referentiels.kdbx"
     }
   ],
   "showOnlyFilesFromConfig": true
