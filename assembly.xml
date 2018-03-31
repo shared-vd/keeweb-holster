@@ -20,7 +20,8 @@
 
     <files>
         <file>
-            <source>target/${project.artifactId}-${version}.war</source>
+            <!-- On prend le résultat du spring-boot-plugin -->
+            <source>target/${project.artifactId}.war</source>
             <destName>${project.artifactId}.war</destName>
             <outputDirectory>deployment</outputDirectory>
         </file>
