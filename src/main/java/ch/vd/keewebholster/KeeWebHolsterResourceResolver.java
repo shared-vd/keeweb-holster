@@ -14,7 +14,7 @@ public class KeeWebHolsterResourceResolver extends PathResourceResolver {
 
     private TransformedResource transformedResource(final Resource resource) throws IOException {
         String fileContent = IOUtils.toString(resource.getInputStream(), FRONT_CONTROLLER_ENCODING);
-        fileContent = fileContent.replace("content=\"(no-config)\"", "content=\"/config.json\"");
+        fileContent = fileContent.replace("content=\"(no-config)\"", "content=\"config.json\"");
         return new TransformedResource(resource, fileContent.getBytes());
     }
 
