@@ -1,5 +1,6 @@
 package ch.vd.keewebholster;
 
+import ch.vd.keewebholster.json.ConfigJson;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.*;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @RequestMapping("/")
@@ -24,9 +26,26 @@ public class SecretsController {
 
     private static final String NAME_MISMATCH_ERROR = "The name of the Secrets file is not the same as the one configured";
 
+    @GetMapping("/config.json")
+    public ResponseEntity<ConfigJson> configJson() throws IOException {
+        log.info("Asking config.json");
+
+        final ConfigJson cj = new ConfigJson();
+
+        List<String> names = Arrays.asList(properties.getNames());
+        for (String name : names) {
+            ConfigJson.File file = new ConfigJson.File();
+            file.name = name;
+            file.path = name + ".kdbx";
+            cj.files.add(file);
+        }
+
+        return new ResponseEntity<>(cj, HttpStatus.OK);
+    }
+
     @GetMapping("/{name}.kdbx")
     public ResponseEntity<byte[]> getSecrets(@PathVariable String name) throws IOException {
-        log.info("Asking file "+name);
+        log.info("Asking file " + name);
         if (!Arrays.asList(properties.getNames()).contains(name)) {
             return new ResponseEntity<>(NAME_MISMATCH_ERROR.getBytes(), HttpStatus.NOT_FOUND);
         }
