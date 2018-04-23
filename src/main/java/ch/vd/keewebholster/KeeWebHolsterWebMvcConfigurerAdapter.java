@@ -27,6 +27,7 @@ public class KeeWebHolsterWebMvcConfigurerAdapter extends WebMvcConfigurerAdapte
         registry.addResourceHandler(PATH_PATTERNS)
                 .addResourceLocations(resourceProperties.getStaticLocations())
                 //.setCachePeriod(resourceProperties.getCachePeriod())
+                .setCachePeriod(0)
                 .resourceChain(true)
                 .addResolver(new KeeWebHolsterResourceResolver());
     }
